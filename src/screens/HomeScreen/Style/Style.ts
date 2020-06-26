@@ -1,0 +1,9 @@
+import {StyleSheet} from 'react-native';
+import Color from '../../../common/color/color';
+
+export const Style = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start',
+  },
+});
