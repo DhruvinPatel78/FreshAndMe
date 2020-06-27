@@ -9,7 +9,14 @@ import Color from '../common/color/color';
 import {RootStackParamList} from './PropType';
 import LoginScreen from '../screens/LoginScreen/LoginScreen';
 import HomeScreen from '../screens/HomeScreen/HomeScreen';
+import ItemListScreen from '../screens/ItemListScreen/ItemListScreen';
 import RegisterScreen from '../screens/RegisterScreen/RegisterScreen';
+import ItemDetailScreen from '../screens/ItemDetailScreen/ItemDetailScreen';
+import CartScreen from '../screens/CartScreen/CartScreen';
+import PlaceOrderScreen from '../screens/PlaceOrderScreen/PlaceOrderScreen';
+import PaymentScreen from '../screens/PaymentScreen/PaymentScreen';
+import LocationScreen from '../screens/LocationScreen/LocationScreen';
+import OrderScreen from '../screens/OrderScreen/OrderScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -41,13 +48,14 @@ const navigation = () => {
             headerTitle: '',
           }}
         />
-        <Stack.Screen
-          name="HomeScreen"
-          component={HomeScreen}
-          options={{
-            title: '',
-          }}
-        />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="ItemListScreen" component={ItemListScreen} />
+        <Stack.Screen name="ItemDetailScreen" component={ItemDetailScreen} />
+        <Stack.Screen name="CartScreen" component={CartScreen} />
+        <Stack.Screen name="PlaceOrderScreen" component={PlaceOrderScreen} />
+        <Stack.Screen name="PaymentScreen" component={PaymentScreen} />
+        <Stack.Screen name="LocationScreen" component={LocationScreen} />
+        <Stack.Screen name="OrderScreen" component={OrderScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

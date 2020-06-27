@@ -5,32 +5,33 @@ import {
   Text,
   View,
   KeyboardAvoidingView,
-  Alert,
 } from 'react-native';
 import {Style} from './Style/Style';
 import {
   LoginScreenNavigationProp,
   LoginScreenProps,
-  //LoginScreenNavigationProp,
 } from '../../navigation/PropType';
 import InputField from '../../component/InputField/InputField';
 import {Button} from 'react-native-paper';
 import Color from '../../common/color/color';
-import {DataType} from '../../common/Data/Data';
 import {useNavigation} from '@react-navigation/native';
 import {useState} from 'react';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const LoginScreen = ({route, navigation}: LoginScreenProps) => {
   const Navigation = useNavigation<LoginScreenNavigationProp>();
 
-  const navigateToRegister = (selectedData: DataType) => {
+  const navigateToRegister = () => {
     Navigation.navigate('RegisterScreen');
+  };
+
+  const navigateToHome = () => {
+    Navigation.navigate('HomeScreen');
   };
 
   const [mobileNo, setMobileNo] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
+  // @ts-ignore
   return (
     <SafeAreaView style={Style.container}>
       <KeyboardAvoidingView>
@@ -77,6 +78,7 @@ const LoginScreen = ({route, navigation}: LoginScreenProps) => {
                   color: Color.whiteColor,
                 }}
                 mode="contained"
+                onPress={navigateToHome}
                 color={Color.primaryColor}>
                 SING IN
               </Button>

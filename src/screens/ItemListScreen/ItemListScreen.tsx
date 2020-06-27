@@ -6,22 +6,18 @@ import {
   TouchableWithoutFeedback,
   FlatList,
   Dimensions,
-  TextInput,
   Image,
-  ImageBackground,
+  Alert,
 } from 'react-native';
 import {Style} from './Style/Style';
 import {
-  HomeScreenProps,
-  HomeScreenNavigationProp,
+  ItemListScreenProps,
+  ItemListScreenNavigationProp,
 } from '../../navigation/PropType';
 import {useNavigation} from '@react-navigation/native';
 import IconFont from 'react-native-vector-icons/FontAwesome';
 import IconFeather from 'react-native-vector-icons/Feather';
-import IconEnty from 'react-native-vector-icons/Entypo';
 import IconAnt from 'react-native-vector-icons/AntDesign';
-import IconMat from 'react-native-vector-icons/MaterialIcons';
-// import {SearchBar} from 'react-native-elements';
 import color from '../../common/color/color';
 import {useState} from 'react';
 import Grid from 'react-native-infinite-scroll-grid';
@@ -30,26 +26,21 @@ import SearchField from '../../component/SearchField/SearchField';
 // import {useState} from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const HomeScreen = ({route, navigation}: HomeScreenProps) => {
+const ItemListScreen = ({route, navigation}: ItemListScreenProps) => {
   const width = Dimensions.get('window').width;
-  const Navigation = useNavigation<HomeScreenNavigationProp>();
+  const Navigation = useNavigation<ItemListScreenNavigationProp>();
+
+  const {selectedCategory} = route.params;
 
   Navigation.setOptions({
-    title: '',
-    headerLeft: () => <IconFont name={'bars'} size={25} />,
-    headerLeftContainerStyle: {
-      padding: 15,
-    },
+    title: selectedCategory.title,
     headerRight: () => (
-      <>
-        <IconFeather name={'bell'} size={25} style={{marginHorizontal: 5}} />
-        <IconFeather
-          name={'shopping-cart'}
-          size={25}
-          style={{marginHorizontal: 5}}
-          onPress={navigateToCart}
-        />
-      </>
+      <IconFeather
+        name={'shopping-cart'}
+        size={25}
+        style={{marginHorizontal: 5}}
+        onPress={navigateToCart}
+      />
     ),
     headerRightContainerStyle: {
       padding: 15,
@@ -59,8 +50,11 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
     },
   });
 
-  const navigateToItemList = (category: any) => {
-    Navigation.navigate('ItemListScreen', {selectedCategory: category});
+  const navigateToDetail = (item: any) => {
+    Navigation.navigate('ItemDetailScreen', {
+      selectedCategory,
+      selectedItem: item,
+    });
   };
 
   const navigateToCart = () => {
@@ -74,6 +68,7 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
       id: '1',
       title: 'First Item',
       extra: '',
+      price: '100',
       image:
         'https://png2.cleanpng.com/sh/bc6d8d7e553de506f8bd470d09145121/L0KzQYm3UsE3N5pviZH0aYP2gLBuTfNpd5R0hNN9ZT3lccO0gBhwa5DxeeZuLYTkgsW0hPFzc15ogNHsb3zkhLa0gB9kd5Iye9p4Y3BvccXsTgBvb155itN3c4Dkgrb1lL1qdZJsfeU2NXG7R4KBVsNjOpU2Uac3MEa1RYq9UsYyPWI9UKI8MES2R4S5Vb5xdpg=/kisspng-chocolate-bar-chocolate-tart-dark-chocolate-cocoa-chocolate-png-transparent-images-5a871863b2d195.0625962615188030437325.png',
     },
@@ -81,6 +76,7 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
       id: '2',
       title: 'Second Item',
       extra: '18+',
+      price: '500',
       image:
         'https://www.pikpng.com/pngl/b/121-1218137_chocolate-png-image-dark-chocolate-transparent-background-clipart.png',
     },
@@ -88,6 +84,7 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
       id: '3',
       title: 'Third Item',
       extra: '',
+      price: '150',
       image:
         'https://png2.cleanpng.com/sh/16a1833baabfa831dabf0a61b40ee76c/L0KzQYm3VMExN5l3fZH0aYP2gLBuTfhwfF5ogNHsb3zkhLa0kB1wd6Vtgdc2ZHH1e37qiP9kd51mjNc2ZnzkhrF5TmCiepDuiAVqboSwRbLqhMc6QWhoUdhsMkexRoO5V8gyP2k2TaQ8NEG4RIWAWMI4O191htk=/kisspng-hot-chocolate-smoothie-dark-chocolate-flavor-%D0%A1roissant-5acd7997c9fc27.6227817815234154478273.png',
     },
@@ -95,6 +92,7 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
       id: '4',
       title: 'First Item',
       extra: '',
+      price: '200',
       image:
         'https://png2.cleanpng.com/sh/bc6d8d7e553de506f8bd470d09145121/L0KzQYm3UsE3N5pviZH0aYP2gLBuTfNpd5R0hNN9ZT3lccO0gBhwa5DxeeZuLYTkgsW0hPFzc15ogNHsb3zkhLa0gB9kd5Iye9p4Y3BvccXsTgBvb155itN3c4Dkgrb1lL1qdZJsfeU2NXG7R4KBVsNjOpU2Uac3MEa1RYq9UsYyPWI9UKI8MES2R4S5Vb5xdpg=/kisspng-chocolate-bar-chocolate-tart-dark-chocolate-cocoa-chocolate-png-transparent-images-5a871863b2d195.0625962615188030437325.png',
     },
@@ -102,6 +100,7 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
       id: '5',
       title: 'Second Item',
       extra: '18+',
+      price: '150',
       image:
         'https://www.pikpng.com/pngl/b/121-1218137_chocolate-png-image-dark-chocolate-transparent-background-clipart.png',
     },
@@ -109,6 +108,7 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
       id: '6',
       title: 'Third Item',
       extra: '',
+      price: '120',
       image:
         'https://png2.cleanpng.com/sh/16a1833baabfa831dabf0a61b40ee76c/L0KzQYm3VMExN5l3fZH0aYP2gLBuTfhwfF5ogNHsb3zkhLa0kB1wd6Vtgdc2ZHH1e37qiP9kd51mjNc2ZnzkhrF5TmCiepDuiAVqboSwRbLqhMc6QWhoUdhsMkexRoO5V8gyP2k2TaQ8NEG4RIWAWMI4O191htk=/kisspng-hot-chocolate-smoothie-dark-chocolate-flavor-%D0%A1roissant-5acd7997c9fc27.6227817815234154478273.png',
     },
@@ -118,107 +118,11 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
     <SafeAreaView style={Style.container}>
       <View
         style={{
-          flex: 1.1,
+          flex: 1,
           flexDirection: 'row',
           paddingHorizontal: 15,
         }}>
-        <View
-          style={{
-            flex: 5,
-            justifyContent: 'center',
-          }}>
-          <TouchableWithoutFeedback>
-            <View
-              style={{
-                backgroundColor: color.graylightColor,
-                flex: 1,
-                marginVertical: 5,
-                flexDirection: 'row',
-                alignItems: 'center',
-                borderRadius: 5,
-              }}>
-              <IconEnty
-                name={'location-pin'}
-                size={25}
-                color={color.primaryColor}
-                style={{
-                  flex: 2,
-                  marginLeft: 10,
-                }}
-              />
-              <Text
-                style={{
-                  flex: 8,
-                  fontSize: 17,
-                  fontWeight: 'bold',
-                  textAlign: 'left',
-                }}>
-                Bardoli
-              </Text>
-              <IconFont
-                style={{
-                  flex: 2,
-                  marginBottom: '5%',
-                }}
-                name={'sort-down'}
-                size={25}
-                color={color.primaryColor}
-              />
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-        <View
-          style={{
-            flex: 7,
-          }}>
-          <SearchField value={searchText} onChange={setSearchText} />
-        </View>
-      </View>
-      <View
-        style={{
-          flex: 2,
-        }}>
-        <FlatList
-          style={{
-            flex: 1,
-            paddingHorizontal: 10,
-            paddingVertical: 5,
-          }}
-          data={DATA}
-          horizontal={true}
-          renderItem={({item}) => {
-            return (
-              <View
-                style={{
-                  width: width / 1.1,
-                  backgroundColor: color.graylightColor,
-                  borderRadius: 5,
-                  marginHorizontal: 5,
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Image
-                  source={{uri: item.image}}
-                  style={{
-                    width: 80,
-                    height: 80,
-                  }}
-                  resizeMode={'center'}
-                />
-                <Text
-                  style={{
-                    fontSize: 20,
-                    fontWeight: 'bold',
-                    marginHorizontal: 10,
-                  }}>
-                  {item.title}
-                </Text>
-              </View>
-            );
-          }}
-          keyExtractor={(item) => item.id}
-        />
+        <SearchField value={searchText} onChange={setSearchText} />
       </View>
       <View
         style={{
@@ -234,7 +138,7 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
           data={DATA}
           keyExtractor={(item, index: number) => item.id}
           renderItem={({item}) => (
-            <TouchableWithoutFeedback onPress={() => navigateToItemList(item)}>
+            <TouchableWithoutFeedback onPress={() => navigateToDetail(item)}>
               <View
                 style={{
                   marginVertical: 10,
@@ -249,10 +153,20 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
                 }}>
                 <View
                   style={{
-                    alignItems: 'flex-end',
                     paddingTop: 10,
+                    flexDirection: 'row',
+                    alignItems: 'center',
                   }}>
-                  {item.extra ? (
+                  <Text
+                    style={{
+                      flex: 8,
+                      paddingLeft: 10,
+                      fontSize: 16,
+                      fontWeight: 'bold',
+                    }}>
+                    {item.title}
+                  </Text>
+                  {Boolean(item.extra) && (
                     <Text
                       style={{
                         backgroundColor: 'red',
@@ -263,13 +177,21 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
                         color: color.whiteColor,
                         fontWeight: 'bold',
                         fontSize: 15,
+                        flex: 2,
                       }}>
                       {item.extra}
                     </Text>
-                  ) : (
-                    <Text />
                   )}
                 </View>
+                <Text
+                  style={{
+                    marginLeft: 10,
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                    color: color.primaryColor,
+                  }}>
+                  {'\u20B9'} {item.price}
+                </Text>
                 <View
                   style={{
                     alignItems: 'center',
@@ -284,14 +206,24 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
                     }}
                     resizeMode={'center'}
                   />
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginBottom: 10,
+                  }}>
+                  <IconAnt name={'minuscircleo'} size={30} />
                   <Text
                     style={{
-                      marginTop: 20,
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: 'bold',
+                      marginHorizontal: 10,
                     }}>
-                    {item.title}
+                    10
                   </Text>
+                  <IconAnt name={'pluscircleo'} size={30} />
                 </View>
               </View>
             </TouchableWithoutFeedback>
@@ -304,4 +236,4 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
   );
 };
 
-export default HomeScreen;
+export default ItemListScreen;

@@ -11,24 +11,22 @@ import {
 import {Style} from './Style/Style';
 import {
   RegisterScreenProps,
-  //LoginScreenNavigationProp,
+  RegisterScreenNavigationProp,
 } from '../../navigation/PropType';
 import InputField from '../../component/InputField/InputField';
 import {Button} from 'react-native-paper';
 import Color from '../../common/color/color';
 import {useState} from 'react';
 import {CheckBox} from 'react-native-elements';
-//import {useNavigation} from '@react-navigation/native';
-// import {useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const RegisterScreen = ({route, navigation}: RegisterScreenProps) => {
-  //const Navigation = useNavigation<LoginScreenNavigationProp>();
-  //
-  // // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const navigateToDetail = (selectedData: DataType) => {
-  //   Navigation.navigate('LoginScreen', {selectedProfile: selectedData});
-  // };
+  const Navigation = useNavigation<RegisterScreenNavigationProp>();
+
+  const navigateToHome = () => {
+    Navigation.navigate('HomeScreen');
+  };
 
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
@@ -86,17 +84,20 @@ const RegisterScreen = ({route, navigation}: RegisterScreenProps) => {
             <View style={Style.checkboxContainer}>
               <CheckBox
                 containerStyle={{
-                  backgroundColor: Color.whiteColor,
                   borderWidth: 0,
+                  // flex: 1,
+                  margin: 0,
+                  width: 30,
                 }}
+                size={20}
                 title=""
-                checkedIcon='dot-circle-o'
-                uncheckedIcon='circle-o'
+                checkedColor={Color.primaryColor}
+                checkedIcon="dot-circle-o"
+                uncheckedIcon="circle-o"
                 checked={acceptTerms}
                 onPress={() => setAcceptTerms(!acceptTerms)}
               />
-              <Text
-                onPress={() => Alert.alert('Hello')}>
+              <Text style={Style.termsText}>
                 I agree with Terms and Conditions and Privacy Policy.
               </Text>
             </View>
@@ -110,6 +111,7 @@ const RegisterScreen = ({route, navigation}: RegisterScreenProps) => {
                 labelStyle={{
                   color: Color.whiteColor,
                 }}
+                onPress={navigateToHome}
                 mode="contained"
                 color={Color.primaryColor}>
                 CREATE

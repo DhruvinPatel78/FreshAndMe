@@ -26,9 +26,12 @@ export const Style = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   checkboxContainer: {
-    marginTop: 15,
-    alignItems: 'center',
     flexDirection: 'row',
+  },
+  termsText: {
+    fontSize: 12,
+    flex: 13,
+    textAlignVertical: 'center',
   },
   FooterContainer: {
     marginTop: 15,
