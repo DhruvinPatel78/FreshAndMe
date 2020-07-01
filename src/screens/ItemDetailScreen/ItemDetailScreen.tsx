@@ -25,7 +25,6 @@ const ItemDetailScreen = ({route, navigation}: ItemDetailScreenProps) => {
   const Navigation = useNavigation<ItemDetailScreenNavigationProp>();
 
   const {selectedCategory, selectedItem} = route.params;
-
   Navigation.setOptions({
     title: selectedCategory.title,
     headerRight: () => (
@@ -50,12 +49,14 @@ const ItemDetailScreen = ({route, navigation}: ItemDetailScreenProps) => {
 
   return (
     <SafeAreaView style={Style.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} style={{
+        marginHorizontal:15
+      }}>
         <Image
-          source={{uri: selectedItem.image}}
+          source={{uri: selectedItem.bigImage}}
           style={{
             width: width - 30,
-            height: width - 30,
+            height: width / 1.5,
             backgroundColor: color.graylightColor,
             borderRadius: 10,
           }}
@@ -72,7 +73,7 @@ const ItemDetailScreen = ({route, navigation}: ItemDetailScreenProps) => {
               fontSize: 25,
               fontWeight: 'bold',
             }}>
-            {selectedItem.title}
+            {selectedItem.productName}
           </Text>
           {Boolean(selectedItem.extra) && (
             <Text
@@ -96,7 +97,7 @@ const ItemDetailScreen = ({route, navigation}: ItemDetailScreenProps) => {
             fontSize: 10,
             color: color.grayColor,
           }}>
-          PRODUCT BY COMPANY
+          PRODUCT BY {selectedItem.productCompany}
         </Text>
         <View
           style={{
@@ -110,7 +111,7 @@ const ItemDetailScreen = ({route, navigation}: ItemDetailScreenProps) => {
               fontWeight: 'bold',
               color: color.primaryColor,
             }}>
-            {'\u20B9'} {selectedItem.price}
+            {'\u20B9'} {selectedItem.productPrice}
           </Text>
           {Boolean(selectedItem.extra) && (
             <Text
@@ -143,15 +144,7 @@ const ItemDetailScreen = ({route, navigation}: ItemDetailScreenProps) => {
             paddingTop: 10,
           }}>
           <Text>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum.
+              {selectedItem.productNote}
           </Text>
         </View>
       </ScrollView>

@@ -4,7 +4,7 @@ import axios from "axios";
  * global api service
  */
 const getUrl = (endpoint: string) =>
-  `https://loopnixpassbook.firebaseio.com/${endpoint}`;
+  `http://onlineshoppingapi.nodevertex.com/${endpoint}`;
 
 const getConfigs = (config: Record<string, any>, additionalHeaders = {}) => ({
   headers: {
@@ -19,6 +19,7 @@ const request = async (
   method: "get" | "post" | "put",
   endpoint: string,
   params = {},
+
   payload = {},
   additionalHeaders = {}
 ) => {

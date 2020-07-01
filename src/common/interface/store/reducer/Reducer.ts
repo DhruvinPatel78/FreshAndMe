@@ -8,4 +8,8 @@ export interface IRootReducerState {
    * PasswordManager Reducer state
    */
   passwordManagerReducer: IPasswordManagerState;
+  homeReducer:any
+  productReducer:any
+  authentication:any
+  cartReducer:any
 }

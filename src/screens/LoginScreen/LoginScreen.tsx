@@ -7,19 +7,29 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import {Style} from './Style/Style';
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   LoginScreenNavigationProp,
   LoginScreenProps,
 } from '../../navigation/PropType';
 import InputField from '../../component/InputField/InputField';
-import {Button} from 'react-native-paper';
+import {Button, Snackbar} from 'react-native-paper';
 import Color from '../../common/color/color';
 import {useNavigation} from '@react-navigation/native';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from "react-redux";
+import {loginUser} from "../../store/actions/Authentication";
+import {IRootReducerState} from "../../common/interface/store/reducer/Reducer";
+import Loader from "../../component/Loader/Loader";
 
 const LoginScreen = ({route, navigation}: LoginScreenProps) => {
   const Navigation = useNavigation<LoginScreenNavigationProp>();
-
+  const {loggedIn} = useSelector((state:IRootReducerState) => state.authentication)
+  const [mobileNo, setMobileNo] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [snackBarVisible, setSnackBarVisible] = useState<boolean>(false);
+  const dispatch = useDispatch();
   const navigateToRegister = () => {
     Navigation.navigate('RegisterScreen');
   };
@@ -28,9 +38,27 @@ const LoginScreen = ({route, navigation}: LoginScreenProps) => {
     Navigation.navigate('HomeScreen');
   };
 
-  const [mobileNo, setMobileNo] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-
+  const userLogin = () => {
+    setIsLoading(true)
+    dispatch(loginUser(mobileNo,password,(response: any) => {
+      if(Boolean(response.Data) && Boolean(response.Status === "1")) {
+        saveInAsyncStorage(response.Data.token).then((res) => {
+          setIsLoading(false);
+          navigateToHome();
+        })
+      } else {
+        setIsLoading(false)
+        setSnackBarVisible(true);
+      }
+    }));
+  }
+  const saveInAsyncStorage = async (token:any) => {
+    try {
+       await AsyncStorage.setItem('@token', token);
+    } catch (error) {
+      throw error
+    }
+  }
   // @ts-ignore
   return (
     <SafeAreaView style={Style.container}>
@@ -77,15 +105,25 @@ const LoginScreen = ({route, navigation}: LoginScreenProps) => {
                 labelStyle={{
                   color: Color.whiteColor,
                 }}
+                disabled={isLoading}
                 mode="contained"
-                onPress={navigateToHome}
+                onPress={userLogin}
                 color={Color.primaryColor}>
-                SING IN
+                {isLoading ? <Loader size="small"/> : "SING IN"}
               </Button>
             </View>
           </View>
         </View>
       </KeyboardAvoidingView>
+      <Snackbar
+          visible={snackBarVisible}
+          onDismiss={() => setSnackBarVisible(false)}
+          action={{
+            label: 'OK',
+            onPress: () => setSnackBarVisible(false)
+          }}>
+       SignIn Failed !
+      </Snackbar>
     </SafeAreaView>
   );
 };

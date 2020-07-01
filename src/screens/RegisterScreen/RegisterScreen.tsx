@@ -16,16 +16,19 @@ import {
 import InputField from '../../component/InputField/InputField';
 import {Button} from 'react-native-paper';
 import Color from '../../common/color/color';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {CheckBox} from 'react-native-elements';
 import {useNavigation} from '@react-navigation/native';
-
+import {registerUser,clearRegisteredUser} from "../../store/actions/Authentication";
+import {useDispatch, useSelector} from "react-redux";
+import {IRootReducerState} from "../../common/interface/store/reducer/Reducer";
+import Loader from "../../component/Loader/Loader";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const RegisterScreen = ({route, navigation}: RegisterScreenProps) => {
   const Navigation = useNavigation<RegisterScreenNavigationProp>();
-
-  const navigateToHome = () => {
-    Navigation.navigate('HomeScreen');
+  const dispatch = useDispatch();
+  const navigateToLogin = () => {
+    Navigation.navigate('LoginScreen');
   };
 
   const [firstName, setFirstName] = useState<string>('');
@@ -34,7 +37,23 @@ const RegisterScreen = ({route, navigation}: RegisterScreenProps) => {
   const [password, setPassword] = useState<string>('');
   const [conPassword, setConPassword] = useState<string>('');
   const [acceptTerms, setAcceptTerms] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const {registered} = useSelector((state:IRootReducerState) => state.authentication)
 
+  const registerUsers = () => {
+      setIsLoading(true)
+      dispatch(registerUser(firstName,lastName,mobileNo,password))
+  }
+  useEffect(() => {
+      if(registered){
+        if(registered.Status === "1"){
+          dispatch(clearRegisteredUser());
+          setIsLoading(false)
+          navigateToLogin();
+        }
+      }
+  },[registered])
+  console.log("registered",registered);
   return (
     <SafeAreaView style={Style.container}>
       <KeyboardAvoidingView>
@@ -105,16 +124,17 @@ const RegisterScreen = ({route, navigation}: RegisterScreenProps) => {
           <View style={Style.FooterContainer}>
             <View style={Style.ButtonContainer}>
               <Button
+                disabled={isLoading}
                 contentStyle={{
                   height: 40,
                 }}
                 labelStyle={{
                   color: Color.whiteColor,
                 }}
-                onPress={navigateToHome}
+                onPress={registerUsers}
                 mode="contained"
                 color={Color.primaryColor}>
-                CREATE
+                {isLoading ? <Loader size="small"/> : "CREATE"}
               </Button>
             </View>
           </View>

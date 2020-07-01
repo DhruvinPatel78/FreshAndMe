@@ -19,9 +19,13 @@ import IconFont from 'react-native-vector-icons/FontAwesome';
 import IconFeather from 'react-native-vector-icons/Feather';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import color from '../../common/color/color';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import Grid from 'react-native-infinite-scroll-grid';
 import SearchField from '../../component/SearchField/SearchField';
+import {useDispatch, useSelector} from "react-redux";
+import {IRootReducerState} from "../../common/interface/store/reducer/Reducer";
+import {getProductList} from "../../store/actions/Product";
+import Loader from "../../component/Loader/Loader";
 // import {Button} from 'react-native-elements';
 // import {useState} from 'react';
 
@@ -29,10 +33,32 @@ import SearchField from '../../component/SearchField/SearchField';
 const ItemListScreen = ({route, navigation}: ItemListScreenProps) => {
   const width = Dimensions.get('window').width;
   const Navigation = useNavigation<ItemListScreenNavigationProp>();
+  const [productListState, setProductListState] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [pagination, setPagination] = useState<any>({
+        strWhere:"",
+        pageIndex:0,
+        pageSize:0
+    })
+    const {selectedCategory} = route.params;
+    const categoryId = selectedCategory && selectedCategory.categoryId;
+    const dispatch = useDispatch();
+    const { productList } = useSelector((state:IRootReducerState) => state.productReducer)
+    useEffect(() => {
+      setPagination({...pagination,strWhere:"[{'key':'categoryId','value':"+categoryId+"}]"});
+      dispatch(getProductList(pagination))
+    },[])
 
-  const {selectedCategory} = route.params;
+    useEffect(() => {
+        if(Boolean(productList.values.length)) {
+            setProductListState(productList.values);
+            setIsLoading(false);
+        }
+    },[productList])
+    const getProductByCategory = () => {
 
-  Navigation.setOptions({
+    }
+    Navigation.setOptions({
     title: selectedCategory.title,
     headerRight: () => (
       <IconFeather
@@ -63,59 +89,11 @@ const ItemListScreen = ({route, navigation}: ItemListScreenProps) => {
 
   const [searchText, setSearchText] = useState<string>('');
 
-  const DATA = [
-    {
-      id: '1',
-      title: 'First Item',
-      extra: '',
-      price: '100',
-      image:
-        'https://png2.cleanpng.com/sh/bc6d8d7e553de506f8bd470d09145121/L0KzQYm3UsE3N5pviZH0aYP2gLBuTfNpd5R0hNN9ZT3lccO0gBhwa5DxeeZuLYTkgsW0hPFzc15ogNHsb3zkhLa0gB9kd5Iye9p4Y3BvccXsTgBvb155itN3c4Dkgrb1lL1qdZJsfeU2NXG7R4KBVsNjOpU2Uac3MEa1RYq9UsYyPWI9UKI8MES2R4S5Vb5xdpg=/kisspng-chocolate-bar-chocolate-tart-dark-chocolate-cocoa-chocolate-png-transparent-images-5a871863b2d195.0625962615188030437325.png',
-    },
-    {
-      id: '2',
-      title: 'Second Item',
-      extra: '18+',
-      price: '500',
-      image:
-        'https://www.pikpng.com/pngl/b/121-1218137_chocolate-png-image-dark-chocolate-transparent-background-clipart.png',
-    },
-    {
-      id: '3',
-      title: 'Third Item',
-      extra: '',
-      price: '150',
-      image:
-        'https://png2.cleanpng.com/sh/16a1833baabfa831dabf0a61b40ee76c/L0KzQYm3VMExN5l3fZH0aYP2gLBuTfhwfF5ogNHsb3zkhLa0kB1wd6Vtgdc2ZHH1e37qiP9kd51mjNc2ZnzkhrF5TmCiepDuiAVqboSwRbLqhMc6QWhoUdhsMkexRoO5V8gyP2k2TaQ8NEG4RIWAWMI4O191htk=/kisspng-hot-chocolate-smoothie-dark-chocolate-flavor-%D0%A1roissant-5acd7997c9fc27.6227817815234154478273.png',
-    },
-    {
-      id: '4',
-      title: 'First Item',
-      extra: '',
-      price: '200',
-      image:
-        'https://png2.cleanpng.com/sh/bc6d8d7e553de506f8bd470d09145121/L0KzQYm3UsE3N5pviZH0aYP2gLBuTfNpd5R0hNN9ZT3lccO0gBhwa5DxeeZuLYTkgsW0hPFzc15ogNHsb3zkhLa0gB9kd5Iye9p4Y3BvccXsTgBvb155itN3c4Dkgrb1lL1qdZJsfeU2NXG7R4KBVsNjOpU2Uac3MEa1RYq9UsYyPWI9UKI8MES2R4S5Vb5xdpg=/kisspng-chocolate-bar-chocolate-tart-dark-chocolate-cocoa-chocolate-png-transparent-images-5a871863b2d195.0625962615188030437325.png',
-    },
-    {
-      id: '5',
-      title: 'Second Item',
-      extra: '18+',
-      price: '150',
-      image:
-        'https://www.pikpng.com/pngl/b/121-1218137_chocolate-png-image-dark-chocolate-transparent-background-clipart.png',
-    },
-    {
-      id: '6',
-      title: 'Third Item',
-      extra: '',
-      price: '120',
-      image:
-        'https://png2.cleanpng.com/sh/16a1833baabfa831dabf0a61b40ee76c/L0KzQYm3VMExN5l3fZH0aYP2gLBuTfhwfF5ogNHsb3zkhLa0kB1wd6Vtgdc2ZHH1e37qiP9kd51mjNc2ZnzkhrF5TmCiepDuiAVqboSwRbLqhMc6QWhoUdhsMkexRoO5V8gyP2k2TaQ8NEG4RIWAWMI4O191htk=/kisspng-hot-chocolate-smoothie-dark-chocolate-flavor-%D0%A1roissant-5acd7997c9fc27.6227817815234154478273.png',
-    },
-  ];
 
   return (
     <SafeAreaView style={Style.container}>
+        {isLoading && <Loader/>}
+        {!isLoading &&    <>
       <View
         style={{
           flex: 1,
@@ -135,8 +113,8 @@ const ItemListScreen = ({route, navigation}: ItemListScreenProps) => {
           //onEndReached={this.handleLoadMore}
           //onEndThreshold={0}
           numColumns={2}
-          data={DATA}
-          keyExtractor={(item, index: number) => item.id}
+          data={productListState}
+          keyExtractor={(item:any, index: number) => item.productId}
           renderItem={({item}) => (
             <TouchableWithoutFeedback onPress={() => navigateToDetail(item)}>
               <View
@@ -164,7 +142,7 @@ const ItemListScreen = ({route, navigation}: ItemListScreenProps) => {
                       fontSize: 16,
                       fontWeight: 'bold',
                     }}>
-                    {item.title}
+                    {item.productName}
                   </Text>
                   {Boolean(item.extra) && (
                     <Text
@@ -190,7 +168,7 @@ const ItemListScreen = ({route, navigation}: ItemListScreenProps) => {
                     fontWeight: 'bold',
                     color: color.primaryColor,
                   }}>
-                  {'\u20B9'} {item.price}
+                  {'\u20B9'} {item.productPrice}
                 </Text>
                 <View
                   style={{
@@ -199,7 +177,7 @@ const ItemListScreen = ({route, navigation}: ItemListScreenProps) => {
                     justifyContent: 'center',
                   }}>
                   <Image
-                    source={{uri: item.image}}
+                    source={{uri: item.smallImage}}
                     style={{
                       width: 100,
                       height: 100,
@@ -231,7 +209,7 @@ const ItemListScreen = ({route, navigation}: ItemListScreenProps) => {
           marginExternal={0}
           marginInternal={0}
         />
-      </View>
+      </View></>}
     </SafeAreaView>
   );
 };

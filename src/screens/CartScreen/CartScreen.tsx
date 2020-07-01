@@ -12,16 +12,34 @@ import {
   CartScreenProps,
   CartScreenNavigationProp,
 } from '../../navigation/PropType';
+import {getToken} from "../../common/Helper/helper";
 import {useNavigation} from '@react-navigation/native';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import color from '../../common/color/color';
 import CustomButton from '../../component/CustomButton/CustomButton';
+import {useEffect, useState} from "react";
+import {getCartList} from "../../store/actions/Cart";
+import {useDispatch, useSelector} from "react-redux";
+import {IRootReducerState} from "../../common/interface/store/reducer/Reducer";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const CartScreen = ({route, navigation}: CartScreenProps) => {
   const width = Dimensions.get('window').width;
+  const [cartListState, setCartListState] = useState([]);
   const Navigation = useNavigation<CartScreenNavigationProp>();
-
+  const token = getToken().then(res => {
+      return res;
+  });
+  const dispatch = useDispatch();
+  const {cartList} = useSelector((state:IRootReducerState) => state.cartReducer)
+  // useEffect(() => {
+  //   dispatch(getCartList(token as any));
+  // },[])
+  // useEffect(() => {
+  //   if(Boolean(cartList.values.length)){
+  //       setCartListState(cartList.values)
+  //   }
+  // },[cartList])
   Navigation.setOptions({
     title: 'Cart',
   });
@@ -29,6 +47,8 @@ const CartScreen = ({route, navigation}: CartScreenProps) => {
   const navigateToPlaceOrder = () => {
     Navigation.navigate('PlaceOrderScreen');
   };
+
+
 
   const DATA = [
     {
@@ -88,7 +108,7 @@ const CartScreen = ({route, navigation}: CartScreenProps) => {
         style={{
           marginVertical: 10,
         }}
-        renderItem={({item}) => {
+        renderItem={({item}:any) => {
           return (
             <View
               style={{
@@ -106,7 +126,7 @@ const CartScreen = ({route, navigation}: CartScreenProps) => {
                   borderRadius: 5,
                 }}>
                 <Image
-                  source={{uri: item.image}}
+                  source={{uri: item.smallImage}}
                   style={{
                     height: 100,
                     flex: 3,

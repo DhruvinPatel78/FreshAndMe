@@ -19,22 +19,51 @@ import {useNavigation} from '@react-navigation/native';
 import IconFont from 'react-native-vector-icons/FontAwesome';
 import IconFeather from 'react-native-vector-icons/Feather';
 import IconEnty from 'react-native-vector-icons/Entypo';
+import Loader from "../../component/Loader/Loader";
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import IconMat from 'react-native-vector-icons/MaterialIcons';
 // import {SearchBar} from 'react-native-elements';
 import color from '../../common/color/color';
-import {useState} from 'react';
+import {IRootReducerState} from "../../common/interface/store/reducer/Reducer";
+import {useEffect, useState} from 'react';
 import Grid from 'react-native-infinite-scroll-grid';
 import SearchField from '../../component/SearchField/SearchField';
+import { ScrollView } from 'react-native-gesture-handler';
+import {useDispatch, useSelector} from "react-redux";
 // import {Button} from 'react-native-elements';
 // import {useState} from 'react';
+import {getCategoryList,getBanners} from "../../store/actions/Home";
+import {clearProductList} from "../../store/actions/Product";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const HomeScreen = ({route, navigation}: HomeScreenProps) => {
   const width = Dimensions.get('window').width;
   const Navigation = useNavigation<HomeScreenNavigationProp>();
+  const [categoryListState, setCategoryListState] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [bannersListState, setBannersListState] = useState<any>([]);
+  const [pagination, setPagination] = useState({
+      strWhere:"",
+      pageIndex:0,
+      pageSize:0
+  })
+  const dispatch = useDispatch();
+  const {categoryList,bannersList} = useSelector((state:IRootReducerState) => state.homeReducer)
+  useEffect(() => {
+      dispatch(getCategoryList(pagination))
+      dispatch(getBanners(pagination))
+  },[])
 
-  Navigation.setOptions({
+  useEffect(() => {
+      if(Boolean(categoryList.values.length) && Boolean(bannersList.values.length)) {
+          setBannersListState(bannersList.values)
+          setCategoryListState(categoryList.values)
+          setIsLoading(false)
+      }
+  },[categoryList, bannersList])
+
+
+   Navigation.setOptions({
     title: '',
     headerLeft: () => <IconFont name={'bars'} size={25} />,
     headerLeftContainerStyle: {
@@ -60,6 +89,7 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
   });
 
   const navigateToItemList = (category: any) => {
+    dispatch(clearProductList())
     Navigation.navigate('ItemListScreen', {selectedCategory: category});
   };
 
@@ -69,54 +99,13 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
 
   const [searchText, setSearchText] = useState<string>('');
 
-  const DATA = [
-    {
-      id: '1',
-      title: 'First Item',
-      extra: '',
-      image:
-        'https://png2.cleanpng.com/sh/bc6d8d7e553de506f8bd470d09145121/L0KzQYm3UsE3N5pviZH0aYP2gLBuTfNpd5R0hNN9ZT3lccO0gBhwa5DxeeZuLYTkgsW0hPFzc15ogNHsb3zkhLa0gB9kd5Iye9p4Y3BvccXsTgBvb155itN3c4Dkgrb1lL1qdZJsfeU2NXG7R4KBVsNjOpU2Uac3MEa1RYq9UsYyPWI9UKI8MES2R4S5Vb5xdpg=/kisspng-chocolate-bar-chocolate-tart-dark-chocolate-cocoa-chocolate-png-transparent-images-5a871863b2d195.0625962615188030437325.png',
-    },
-    {
-      id: '2',
-      title: 'Second Item',
-      extra: '18+',
-      image:
-        'https://www.pikpng.com/pngl/b/121-1218137_chocolate-png-image-dark-chocolate-transparent-background-clipart.png',
-    },
-    {
-      id: '3',
-      title: 'Third Item',
-      extra: '',
-      image:
-        'https://png2.cleanpng.com/sh/16a1833baabfa831dabf0a61b40ee76c/L0KzQYm3VMExN5l3fZH0aYP2gLBuTfhwfF5ogNHsb3zkhLa0kB1wd6Vtgdc2ZHH1e37qiP9kd51mjNc2ZnzkhrF5TmCiepDuiAVqboSwRbLqhMc6QWhoUdhsMkexRoO5V8gyP2k2TaQ8NEG4RIWAWMI4O191htk=/kisspng-hot-chocolate-smoothie-dark-chocolate-flavor-%D0%A1roissant-5acd7997c9fc27.6227817815234154478273.png',
-    },
-    {
-      id: '4',
-      title: 'First Item',
-      extra: '',
-      image:
-        'https://png2.cleanpng.com/sh/bc6d8d7e553de506f8bd470d09145121/L0KzQYm3UsE3N5pviZH0aYP2gLBuTfNpd5R0hNN9ZT3lccO0gBhwa5DxeeZuLYTkgsW0hPFzc15ogNHsb3zkhLa0gB9kd5Iye9p4Y3BvccXsTgBvb155itN3c4Dkgrb1lL1qdZJsfeU2NXG7R4KBVsNjOpU2Uac3MEa1RYq9UsYyPWI9UKI8MES2R4S5Vb5xdpg=/kisspng-chocolate-bar-chocolate-tart-dark-chocolate-cocoa-chocolate-png-transparent-images-5a871863b2d195.0625962615188030437325.png',
-    },
-    {
-      id: '5',
-      title: 'Second Item',
-      extra: '18+',
-      image:
-        'https://www.pikpng.com/pngl/b/121-1218137_chocolate-png-image-dark-chocolate-transparent-background-clipart.png',
-    },
-    {
-      id: '6',
-      title: 'Third Item',
-      extra: '',
-      image:
-        'https://png2.cleanpng.com/sh/16a1833baabfa831dabf0a61b40ee76c/L0KzQYm3VMExN5l3fZH0aYP2gLBuTfhwfF5ogNHsb3zkhLa0kB1wd6Vtgdc2ZHH1e37qiP9kd51mjNc2ZnzkhrF5TmCiepDuiAVqboSwRbLqhMc6QWhoUdhsMkexRoO5V8gyP2k2TaQ8NEG4RIWAWMI4O191htk=/kisspng-hot-chocolate-smoothie-dark-chocolate-flavor-%D0%A1roissant-5acd7997c9fc27.6227817815234154478273.png',
-    },
-  ];
+
 
   return (
     <SafeAreaView style={Style.container}>
-      <View
+        {isLoading && <Loader/>}
+            {!isLoading &&    <>
+        <View
         style={{
           flex: 1.1,
           flexDirection: 'row',
@@ -174,7 +163,7 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
           <SearchField value={searchText} onChange={setSearchText} />
         </View>
       </View>
-      <View
+          <View
         style={{
           flex: 2,
         }}>
@@ -184,9 +173,9 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
             paddingHorizontal: 10,
             paddingVertical: 5,
           }}
-          data={DATA}
+          data={bannersListState}
           horizontal={true}
-          renderItem={({item}) => {
+          renderItem={({item}:any) => {
             return (
               <View
                 style={{
@@ -199,7 +188,7 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
                   alignItems: 'center',
                 }}>
                 <Image
-                  source={{uri: item.image}}
+                  source={{uri: item.smallImage}}
                   style={{
                     width: 80,
                     height: 80,
@@ -212,15 +201,15 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
                     fontWeight: 'bold',
                     marginHorizontal: 10,
                   }}>
-                  {item.title}
+                  {item.bannerName}
                 </Text>
               </View>
             );
           }}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item:any) => item.bannerId}
         />
       </View>
-      <View
+        <View
         style={{
           flex: 10,
           paddingHorizontal: 15,
@@ -231,8 +220,8 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
           //onEndReached={this.handleLoadMore}
           //onEndThreshold={0}
           numColumns={2}
-          data={DATA}
-          keyExtractor={(item, index: number) => item.id}
+          data={categoryListState}
+          keyExtractor={(item:any, index: number) => item.categoryId}
           renderItem={({item}) => (
             <TouchableWithoutFeedback onPress={() => navigateToItemList(item)}>
               <View
@@ -277,7 +266,7 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
                     justifyContent: 'center',
                   }}>
                   <Image
-                    source={{uri: item.image}}
+                    source={{uri: item.smallImage}}
                     style={{
                       width: 100,
                       height: 100,
@@ -290,7 +279,7 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
                       fontSize: 18,
                       fontWeight: 'bold',
                     }}>
-                    {item.title}
+                    {item.categoryName}
                   </Text>
                 </View>
               </View>
@@ -300,6 +289,7 @@ const HomeScreen = ({route, navigation}: HomeScreenProps) => {
           marginInternal={0}
         />
       </View>
+        </>}
     </SafeAreaView>
   );
 };
