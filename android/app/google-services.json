@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "485561502650",
+    "firebase_url": "https://freshandme-8781a.firebaseio.com",
+    "project_id": "freshandme-8781a",
+    "storage_bucket": "freshandme-8781a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:485561502650:android:3c50a95134392482986b83",
+        "android_client_info": {
+          "package_name": "com.freshandme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "485561502650-j864hftv1aufojnrc7t1ele3sd2egnve.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.freshandme",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "485561502650-9bacd2i0icmjjvebtsgkpihmjnn8gtip.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.freshandme",
+            "certificate_hash": "722f63bc8cc7a6ff598396d93a2339e02c734c27"
+          }
+        },
+        {
+          "client_id": "485561502650-bj1fqqqf7bqtg9k6ouobgmaegjbedgc3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9u0fBrz3DWToRkjzE9B-uoPVHduy8Tcc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "485561502650-bj1fqqqf7bqtg9k6ouobgmaegjbedgc3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

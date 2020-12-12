@@ -16,6 +16,11 @@ export const Style = StyleSheet.create({
   SubContainer: {
     width: width / 1.1,
   },
+  headingContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
   heading: {
     fontSize: Constant.Heading1,
     color: Color.secondaryColor,
@@ -34,7 +39,7 @@ export const Style = StyleSheet.create({
   },
   forgotpasswordText: {
     color: Color.grayColor,
-    fontSize: 12,
+    fontSize: 14,
   },
   createAccountText: {
     color: Color.secondaryColor,

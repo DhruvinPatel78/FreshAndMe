@@ -77,6 +77,26 @@ target 'FreshAndMe' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
+  pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
+
+
+
+  pod 'RNCMaskedView', :path => '../node_modules/@react-native-community/masked-view'
+
+
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
+
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
+
+  pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
+
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
   target 'FreshAndMeTests' do
     inherit! :complete
     # Pods for testing

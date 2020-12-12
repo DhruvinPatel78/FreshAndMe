@@ -1,124 +1,110 @@
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {IAddress} from '../store/interface/UserData/UserDataInterface';
 
 export type RootStackParamList = {
-  LoginScreen: undefined;
-  RegisterScreen: undefined;
-  HomeScreen: undefined;
-  ItemListScreen: {
-    selectedCategory: any;
-  };
-  ItemDetailScreen: {
-    selectedCategory: any;
-    selectedItem: any;
-  };
-  CartScreen: undefined;
-  PlaceOrderScreen: undefined;
-  PaymentScreen: undefined;
-  LocationScreen: undefined;
-  OrderScreen: undefined;
+	LoginScreen: undefined;
+	RegisterScreen: undefined;
+	HomeScreen: undefined;
+	ItemListScreen: {
+		selectedCategory: any;
+	};
+	ItemDetailScreen: {
+		selectedCategory: any;
+		selectedProduct: any;
+	};
+	CartScreen: undefined;
+	PlaceOrderScreen: undefined;
+	PaymentScreen: {
+		amount: number;
+		address: any;
+	};
+	LocationScreen: undefined;
+	OrderScreen: undefined;
+	ProfileScreen: undefined;
+	NotificationScreen: undefined;
+	ManageAddressScreen: {
+		selectedAddress: IAddress;
+	};
 };
 
 type HomeScreenRouteProp = RouteProp<RootStackParamList, 'HomeScreen'>;
-export type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList>;
+export type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 type ItemListScreenRouteProp = RouteProp<RootStackParamList, 'ItemListScreen'>;
-export type ItemListScreenNavigationProp = StackNavigationProp<
-  RootStackParamList
->;
-
-type ItemDetailScreenRouteProp = RouteProp<
-  RootStackParamList,
-  'ItemDetailScreen'
->;
-export type ItemDetailScreenNavigationProp = StackNavigationProp<
-  RootStackParamList
->;
-
+type ItemDetailScreenRouteProp = RouteProp<RootStackParamList, 'ItemDetailScreen'>;
 type CartScreenRouteProp = RouteProp<RootStackParamList, 'CartScreen'>;
-export type CartScreenNavigationProp = StackNavigationProp<RootStackParamList>;
-
 type OrderScreenRouteProp = RouteProp<RootStackParamList, 'OrderScreen'>;
-export type OrderScreenNavigationProp = StackNavigationProp<RootStackParamList>;
-
-type PlaceOrderScreenRouteProp = RouteProp<
-  RootStackParamList,
-  'PlaceOrderScreen'
->;
-export type PlaceOrderScreenNavigationProp = StackNavigationProp<
-  RootStackParamList
->;
-
+type PlaceOrderScreenRouteProp = RouteProp<RootStackParamList, 'PlaceOrderScreen'>;
 type LoginScreenRouteProp = RouteProp<RootStackParamList, 'LoginScreen'>;
-export type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList>;
-
 type LocationScreenRouteProp = RouteProp<RootStackParamList, 'LocationScreen'>;
-export type LocationScreenNavigationProp = StackNavigationProp<
-  RootStackParamList
->;
-
 type RegisterScreenRouteProp = RouteProp<RootStackParamList, 'RegisterScreen'>;
-export type RegisterScreenNavigationProp = StackNavigationProp<
-  RootStackParamList
->;
-
 type PaymentScreenRouteProp = RouteProp<RootStackParamList, 'PaymentScreen'>;
-export type PaymentScreenNavigationProp = StackNavigationProp<
-  RootStackParamList
->;
-
-// type PasswordListRouteProp = RouteProp<RootStackParamList, 'PasswordList'>;
-// export type PasswordListNavigationProp = StackNavigationProp<
-//   RootStackParamList,
-//   'PasswordList'
-// >;
+type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'ProfileScreen'>;
+type NotificationScreenRouteProp = RouteProp<RootStackParamList, 'NotificationScreen'>;
+type ManageAddressScreenRouteProp = RouteProp<RootStackParamList, 'ManageAddressScreen'>;
 
 export type HomeScreenProps = {
-  route: HomeScreenRouteProp;
-  navigation: HomeScreenNavigationProp;
+	route: HomeScreenRouteProp;
+	navigation: NavigationProp;
 };
 
 export type ItemListScreenProps = {
-  route: ItemListScreenRouteProp;
-  navigation: ItemListScreenNavigationProp;
+	route: ItemListScreenRouteProp;
+	navigation: NavigationProp;
 };
 
 export type ItemDetailScreenProps = {
-  route: ItemDetailScreenRouteProp;
-  navigation: ItemDetailScreenNavigationProp;
+	route: ItemDetailScreenRouteProp;
+	navigation: NavigationProp;
 };
 
 export type CartScreenProps = {
-  route: CartScreenRouteProp;
-  navigation: CartScreenNavigationProp;
+	route: CartScreenRouteProp;
+	navigation: NavigationProp;
 };
 
 export type PlaceOrderScreenProps = {
-  route: PlaceOrderScreenRouteProp;
-  navigation: PlaceOrderScreenNavigationProp;
+	route: PlaceOrderScreenRouteProp;
+	navigation: NavigationProp;
 };
 
 export type PaymentScreenProps = {
-  route: PaymentScreenRouteProp;
-  navigation: PaymentScreenNavigationProp;
+	route: PaymentScreenRouteProp;
+	navigation: NavigationProp;
 };
 
 export type OrderScreenProps = {
-  route: OrderScreenRouteProp;
-  navigation: OrderScreenNavigationProp;
+	route: OrderScreenRouteProp;
+	navigation: NavigationProp;
 };
 
 export type LocationScreenProps = {
-  route: LocationScreenRouteProp;
-  navigation: LocationScreenNavigationProp;
+	route: LocationScreenRouteProp;
+	navigation: NavigationProp;
 };
 
 export type LoginScreenProps = {
-  route: LoginScreenRouteProp;
-  navigation: LoginScreenNavigationProp;
+	route: LoginScreenRouteProp;
+	navigation: NavigationProp;
 };
 
 export type RegisterScreenProps = {
-  route: RegisterScreenRouteProp;
-  navigation: RegisterScreenNavigationProp;
+	route: RegisterScreenRouteProp;
+	navigation: NavigationProp;
+};
+
+export type ProfileScreenProps = {
+	route: ProfileScreenRouteProp;
+	navigation: NavigationProp;
+};
+
+export type NotificationScreenProps = {
+	route: NotificationScreenRouteProp;
+	navigation: NavigationProp;
+};
+
+export type ManageAddressScreenProps = {
+	route: ManageAddressScreenRouteProp;
+	navigation: NavigationProp;
 };

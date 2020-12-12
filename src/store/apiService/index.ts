@@ -19,7 +19,6 @@ const request = async (
   method: "get" | "post" | "put",
   endpoint: string,
   params = {},
-
   payload = {},
   additionalHeaders = {}
 ) => {
@@ -31,7 +30,10 @@ const request = async (
       getConfigs({ params }, additionalHeaders)
     );
   } else {
-    request = axios.get(getUrl(endpoint), getConfigs({ params }));
+    request = axios.get(
+      getUrl(endpoint),
+      getConfigs({ params }, additionalHeaders)
+    );
   }
 
   const { data } = await request;

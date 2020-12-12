@@ -10,26 +10,48 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.11.0",
+    "@react-native-community/geolocation": "^2.0.2",
     "@react-native-community/masked-view": "^0.1.10",
+    "@react-native-community/netinfo": "^5.9.5",
+    "@react-native-community/picker": "^1.6.5",
+    "@react-native-firebase/app": "^8.3.1",
+    "@react-native-firebase/messaging": "^7.7.1",
     "@react-navigation/native": "^5.5.1",
     "@react-navigation/stack": "^5.5.1",
     "@types/axios": "^0.14.0",
+    "@types/react-native-maps": "^0.24.0",
+    "@types/react-native-snap-carousel": "^3.8.1",
     "@types/react-native-vector-icons": "^6.4.5",
     "@types/react-redux": "^7.1.9",
     "axios": "^0.19.2",
+    "cashfreereactnativepg": "^3.2.0",
+    "moment": "^2.27.0",
     "react": "16.11.0",
     "react-native": "0.62.2",
-    "react-native-elements": "^2.0.2",
+    "react-native-animated-splash-screen": "^2.0.4",
+    "react-native-device-info": "^5.6.3",
+    "react-native-geocoding": "^0.4.0",
     "react-native-gesture-handler": "^1.6.1",
+    "react-native-global-font": "^1.0.2",
+    "react-native-google-places-autocomplete": "^1.9.0",
     "react-native-infinite-scroll-grid": "^0.1.0",
+    "react-native-maps": "0.27.1",
+    "react-native-mask-loader": "0.0.3",
     "react-native-paper": "^3.10.1",
     "react-native-reanimated": "^1.9.0",
     "react-native-safe-area-context": "^3.0.6",
     "react-native-screens": "^2.9.0",
-    "react-native-vector-icons": "^6.6.0",
+    "react-native-snap-carousel": "^3.9.1",
+    "react-native-svg": "^12.1.0",
+    "react-native-vector-icons": "^7.0.0",
+    "react-native-webview": "^10.3.2",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-devtools-extension": "^2.13.8",
+    "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.3.0",
+    "reinput": "^3.7.2"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
@@ -57,6 +79,11 @@
       "jsx",
       "json",
       "node"
+    ]
+  },
+  "rnpm": {
+    "assets": [
+      "./src/assets/assets/fonts"
     ]
   }
 }

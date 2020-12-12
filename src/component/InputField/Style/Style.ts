@@ -3,10 +3,8 @@ import Color from '../../../common/color/color';
 
 export const Style = StyleSheet.create({
   container: {
-    // display: 'flex',
-    // height: 50,
-    //marginTop: 10,
-    //paddingTop: 10,
+    height: 50,
+    marginTop: 6,
   },
 
   textInputStyle: {

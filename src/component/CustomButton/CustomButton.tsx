@@ -5,46 +5,38 @@ import IconAnt from 'react-native-vector-icons/AntDesign';
 import IconFont from 'react-native-vector-icons/FontAwesome';
 import IconMat from 'react-native-vector-icons/MaterialIcons';
 import {CustomButtonInterface} from './Interface/CustomButtonInterface';
+import Loader from '../Loader/Loader';
 
 const CustomButton: React.FC<CustomButtonInterface> = (props) => {
-  const {title, icon, backgroundColor, onClick, iconLib} = props;
-
-  const Icon =
-    iconLib === 'font' ? IconFont : iconLib === 'mat' ? IconMat : IconAnt;
+  const {title, backgroundColor, onClick, disabled, loading } = props;
 
   return (
-    <TouchableWithoutFeedback onPress={onClick}>
+    <TouchableWithoutFeedback onPress={onClick} disabled={disabled}>
       <View
         style={{
           flex: 1,
-          flexDirection: 'row',
-          backgroundColor: backgroundColor,
-          paddingVertical: 5,
+          backgroundColor: !disabled ? backgroundColor : color.graylightColor,
+          paddingVertical: 25,
           borderRadius: 10,
-          justifyContent: 'space-between',
+          justifyContent: 'center',
           alignItems: 'center',
-          elevation: 5,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.23,
+          shadowRadius: 2.62,
+          elevation: 4,
         }}>
+        {loading ? <Loader size="small"/> :
         <Text
           style={{
             color: color.whiteColor,
             fontWeight: 'bold',
-            marginLeft: 15,
           }}>
           {title}
-        </Text>
-        <Icon
-          name={icon}
-          size={20}
-          color={color.secondaryColor}
-          style={{
-            backgroundColor: color.whiteColor,
-            padding: 10,
-            borderRadius: 10,
-            marginHorizontal: 5,
-            elevation: 5,
-          }}
-        />
+        </Text>}
       </View>
     </TouchableWithoutFeedback>
   );
