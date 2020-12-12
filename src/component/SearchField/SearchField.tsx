@@ -7,7 +7,12 @@ import {SearchFieldInterface} from './Interface/SearchFieldInterface';
 import {Style} from './Style/Style';
 
 const SearchField: React.FC<SearchFieldInterface> = (props) => {
-  const {value, onChange} = props;
+  const {value, onChange, onSubmit} = props;
+
+  const clearSearch = () => {
+
+  }
+
   return (
     <View style={Style.container}>
       <IconAnt
@@ -22,6 +27,7 @@ const SearchField: React.FC<SearchFieldInterface> = (props) => {
         value={value}
         onChangeText={(text: string) => onChange(text)}
         returnKeyType={'go'}
+        onSubmitEditing={() => onSubmit(value)}
       />
       {Boolean(value) && (
         <IconMat

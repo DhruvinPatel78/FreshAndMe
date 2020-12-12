@@ -27,6 +27,8 @@ export const Style = StyleSheet.create({
   },
   checkboxContainer: {
     flexDirection: 'row',
+    marginTop: 10,
+    alignItems: 'center'
   },
   termsText: {
     fontSize: 12,

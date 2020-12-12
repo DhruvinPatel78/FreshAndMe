@@ -1,5 +1,20 @@
+import {IAuthentication, ILoggedIn} from '../../interface/Authentication/AuthenticationInterface';
 
-export const initialAuthenticationState: any = {
+export const initialLoggedIn: ILoggedIn = {
+    birthDate: '',
+    deviceId: '',
+    deviceType: '',
+    firstName: '',
+    isActive: 0,
+    isValid: 0,
+    lastName: '',
+    mobileNo: '',
+    token: '',
+    userId: 0,
+    userType: '',
+}
+
+export const initialAuthenticationState: IAuthentication = {
     /**
      * Registration Response
      */
@@ -7,7 +22,7 @@ export const initialAuthenticationState: any = {
     /**
      * Registration Response
      */
-    loggedIn: [],
+    loggedIn: initialLoggedIn,
     /**
      * error for CategoryList State
      */
@@ -16,5 +31,6 @@ export const initialAuthenticationState: any = {
     /**
      * Loading state of state
      */
-    loading: false
+    loading: false,
+    fcmToken: ''
 };

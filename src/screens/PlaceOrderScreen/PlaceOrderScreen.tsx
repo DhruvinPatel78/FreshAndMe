@@ -1,262 +1,445 @@
-import * as React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  View,
-  Text,
-  SafeAreaView,
-  FlatList,
-  Dimensions,
-  Image,
+	View,
+	Text,
+	SafeAreaView,
+	FlatList,
+	Dimensions,
+	Image, Alert,
 } from 'react-native';
 import {Style} from './Style/Style';
 import {
-  PlaceOrderScreenProps,
-  PlaceOrderScreenNavigationProp,
+	PlaceOrderScreenProps,
+	NavigationProp,
 } from '../../navigation/PropType';
 import {useNavigation} from '@react-navigation/native';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import IconFea from 'react-native-vector-icons/Feather';
 import color from '../../common/color/color';
-import CustomButton from '../../component/CustomButton/CustomButton';
+import CustomIconButton from '../../component/CustomButton/CustomIconButton';
+import {useDispatch, useSelector} from 'react-redux';
+import {IRootReducerState} from '../../common/interface/store/reducer/Reducer';
+import {getUserAddressAction} from '../../store/actions/UserData';
+import {Picker} from '@react-native-community/picker';
+import {
+	clearCartList,
+	deleteCartProductQtyAction,
+	getCartList,
+	updateCartProductQtyAction,
+} from '../../store/actions/Cart';
+import {Snackbar} from 'react-native-paper';
+import {addUserOrderAction, clearOrderList} from '../../store/actions/Order';
+import CustomAlert from '../../component/CustomAlert/CustomAlert';
+import Geolocation from '@react-native-community/geolocation';
+import {IAddress} from '../../store/interface/UserData/UserDataInterface';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const PlaceOrderScreen = ({route, navigation}: PlaceOrderScreenProps) => {
-  const width = Dimensions.get('window').width;
-  const Navigation = useNavigation<PlaceOrderScreenNavigationProp>();
+const PlaceOrderScreen: React.FC<PlaceOrderScreenProps> = ({route, navigation}) => {
+	const {width, height} = Dimensions.get('window');
+	const Navigation = useNavigation<NavigationProp>();
+	const dispatch = useDispatch();
 
-  // const {selectedCategory} = route.params;
 
-  Navigation.setOptions({
-    title: 'Place Order',
-  });
+	const cartReducer = useSelector((state: IRootReducerState) => state.cartReducer);
+	const authState = useSelector((state: IRootReducerState) => state.authentication.loggedIn);
+	const userState = useSelector((state: IRootReducerState) => state.UserDataReducer.addresses);
 
-  const navigateToPayment = () => {
-    Navigation.navigate('PaymentScreen');
-  };
+	const [cartListState, setCartListState] = useState<any>([]);
+	const [totalPrice, setTotalPrice] = useState<number>(0);
 
-  const navigateToLocation = () => {
-    Navigation.navigate('LocationScreen');
-  };
+	const [address, setAddress] = useState<string>('0');
+	const [addresses, setAddresses] = useState<any>([]);
 
-  const DATA = [
-    {
-      id: '1',
-      title: 'First Item',
-      extra: '',
-      price: '100',
-      image:
-        'https://png2.cleanpng.com/sh/bc6d8d7e553de506f8bd470d09145121/L0KzQYm3UsE3N5pviZH0aYP2gLBuTfNpd5R0hNN9ZT3lccO0gBhwa5DxeeZuLYTkgsW0hPFzc15ogNHsb3zkhLa0gB9kd5Iye9p4Y3BvccXsTgBvb155itN3c4Dkgrb1lL1qdZJsfeU2NXG7R4KBVsNjOpU2Uac3MEa1RYq9UsYyPWI9UKI8MES2R4S5Vb5xdpg=/kisspng-chocolate-bar-chocolate-tart-dark-chocolate-cocoa-chocolate-png-transparent-images-5a871863b2d195.0625962615188030437325.png',
-    },
-    {
-      id: '2',
-      title: 'Second Item',
-      extra: '18+',
-      price: '500',
-      image:
-        'https://www.pikpng.com/pngl/b/121-1218137_chocolate-png-image-dark-chocolate-transparent-background-clipart.png',
-    },
-    {
-      id: '3',
-      title: 'Third Item',
-      extra: '',
-      price: '150',
-      image:
-        'https://png2.cleanpng.com/sh/16a1833baabfa831dabf0a61b40ee76c/L0KzQYm3VMExN5l3fZH0aYP2gLBuTfhwfF5ogNHsb3zkhLa0kB1wd6Vtgdc2ZHH1e37qiP9kd51mjNc2ZnzkhrF5TmCiepDuiAVqboSwRbLqhMc6QWhoUdhsMkexRoO5V8gyP2k2TaQ8NEG4RIWAWMI4O191htk=/kisspng-hot-chocolate-smoothie-dark-chocolate-flavor-%D0%A1roissant-5acd7997c9fc27.6227817815234154478273.png',
-    },
-    {
-      id: '4',
-      title: 'First Item',
-      extra: '',
-      price: '200',
-      image:
-        'https://png2.cleanpng.com/sh/bc6d8d7e553de506f8bd470d09145121/L0KzQYm3UsE3N5pviZH0aYP2gLBuTfNpd5R0hNN9ZT3lccO0gBhwa5DxeeZuLYTkgsW0hPFzc15ogNHsb3zkhLa0gB9kd5Iye9p4Y3BvccXsTgBvb155itN3c4Dkgrb1lL1qdZJsfeU2NXG7R4KBVsNjOpU2Uac3MEa1RYq9UsYyPWI9UKI8MES2R4S5Vb5xdpg=/kisspng-chocolate-bar-chocolate-tart-dark-chocolate-cocoa-chocolate-png-transparent-images-5a871863b2d195.0625962615188030437325.png',
-    },
-    {
-      id: '5',
-      title: 'Second Item',
-      extra: '18+',
-      price: '150',
-      image:
-        'https://www.pikpng.com/pngl/b/121-1218137_chocolate-png-image-dark-chocolate-transparent-background-clipart.png',
-    },
-    {
-      id: '6',
-      title: 'Third Item',
-      extra: '',
-      price: '120',
-      image:
-        'https://png2.cleanpng.com/sh/16a1833baabfa831dabf0a61b40ee76c/L0KzQYm3VMExN5l3fZH0aYP2gLBuTfhwfF5ogNHsb3zkhLa0kB1wd6Vtgdc2ZHH1e37qiP9kd51mjNc2ZnzkhrF5TmCiepDuiAVqboSwRbLqhMc6QWhoUdhsMkexRoO5V8gyP2k2TaQ8NEG4RIWAWMI4O191htk=/kisspng-hot-chocolate-smoothie-dark-chocolate-flavor-%D0%A1roissant-5acd7997c9fc27.6227817815234154478273.png',
-    },
-  ];
+	const [snackbarVisible, setSnackbarVisible] = useState<boolean>(false);
+	const [snackbarMsg, setSnackbarMsg] = useState<string>('');
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  return (
-    <SafeAreaView style={Style.container}>
-      <View style={{}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingVertical: 10,
-            borderBottomColor: color.grayColor,
-            borderBottomWidth: 1,
-          }}>
-          <Text>ADDRESS</Text>
-          <IconFea
-            name="edit-2"
-            size={18}
-            style={{
-              paddingLeft: 5,
-            }}
-            onPress={navigateToLocation}
-          />
-        </View>
-        <View
-          style={{
-            backgroundColor: color.whiteColor,
-            elevation: 5,
-            borderRadius: 5,
-            padding: 10,
-            marginVertical: 10,
-          }}>
-          <Text
-            style={{
-              marginVertical: 5,
-            }}>
-            8, Nirant Raw House, Gandhi Road, Bardoli - 394601
-          </Text>
-        </View>
-      </View>
-      <FlatList
-        data={DATA}
-        style={{
-          flex: 1,
-          marginVertical: 10,
-          borderTopColor: color.grayColor,
-          borderTopWidth: 1,
-          paddingTop: 10,
-        }}
-        renderItem={({item}) => {
-          return (
-            <View
-              style={{
-                backgroundColor: color.whiteColor,
-                borderRadius: 5,
-                marginVertical: 5,
-                flexDirection: 'row',
-              }}>
-              <View
-                style={{
-                  flex: 3,
-                  borderRadius: 5,
-                }}>
-                <Image
-                  source={{uri: item.image}}
-                  style={{
-                    height: 100,
-                    flex: 3,
-                    backgroundColor: color.grayColor,
-                    overflow: 'hidden',
-                  }}
-                  resizeMode={'center'}
-                />
-              </View>
-              <View
-                style={{
-                  flex: 8,
-                  paddingVertical: 5,
-                  paddingHorizontal: 5,
-                  justifyContent: 'space-between',
-                }}>
-                <View>
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      fontWeight: 'bold',
-                      color: color.secondaryColor,
-                    }}>
-                    {item.title}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      fontWeight: 'bold',
-                      color: color.primaryColor,
-                    }}>
-                    {'\u20B9'} {item.price}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    marginBottom: 10,
-                  }}>
-                  <IconAnt name={'minuscircleo'} size={25} />
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      fontWeight: 'bold',
-                      marginHorizontal: 10,
-                    }}>
-                    10
-                  </Text>
-                  <IconAnt name={'pluscircleo'} size={25} />
-                </View>
-              </View>
-              <View
-                style={{
-                  flex: 2,
-                  justifyContent: 'space-between',
-                  paddingVertical: 10,
-                  alignItems: 'flex-end',
-                  paddingHorizontal: 10,
-                }}>
-                <IconFea
-                  name={'trash'}
-                  size={20}
-                  color={color.secondaryColor}
-                  style={{padding: 5}}
-                />
-              </View>
-            </View>
-          );
-        }}
-      />
-      <View
-        style={{
-          marginVertical: 10,
-          paddingVertical: 5,
-          borderTopColor: color.grayColor,
-          borderTopWidth: 1,
-          flexDirection: 'row',
-          height: width / 6,
-        }}>
-        <View style={{flex: 5, alignItems: 'flex-start'}}>
-          <Text
-            style={{
-              fontSize: 30,
-              fontWeight: 'bold',
-              color: color.secondaryColor,
-            }}>
-            {'\u20B9'} 500.00
-          </Text>
-          <Text
-            style={{
-              fontSize: 10,
-            }}>
-            With all Text and Shipping
-          </Text>
-        </View>
-        <View style={{flex: 5}}>
-          <CustomButton
-            title={'CHECK OUT'}
-            icon={'credit-card-alt'}
-            iconLib={'font'}
-            onClick={navigateToPayment}
-            backgroundColor={color.primaryColor}
-          />
-        </View>
-      </View>
-    </SafeAreaView>
-  );
+	const [isOpen, setIsOpen] = useState<boolean>(false);
+
+	Navigation.setOptions({
+		title: 'Place Order',
+	});
+
+	const navigateToPayment = () => {
+		if (address !== '0') {
+			setIsOpen(true);
+		} else {
+			setSnackbarMsg('Please select delivery address.');
+			setSnackbarVisible(true);
+		}
+	};
+
+	const navigateToLocation = () => {
+		Geolocation.getCurrentPosition(
+			() => Navigation.navigate('LocationScreen'),
+			(error) => Alert.alert(error.message, 'Please turned on your GPS.'));
+		// Navigation.navigate('LocationScreen');
+	};
+
+	const NavigateToOrder = () => {
+		dispatch(clearOrderList());
+		Navigation.replace('OrderScreen');
+		dispatch(clearCartList());
+	};
+
+	useEffect(() => {
+		if (authState) {
+			if (cartListState.length === 0) {
+				dispatch(getCartList(authState.userId, authState.token));
+			}
+			navigation.addListener('focus', getUserAddress)
+		}
+	}, []);
+
+	const getUserAddresses = () => {
+
+	}
+
+	useEffect(() => {
+		if (cartReducer.cartList.length > 0) {
+			setCartListState(cartReducer.cartList);
+		}
+	}, [cartReducer.cartList]);
+
+	useEffect(() => {
+		setIsLoading(cartReducer.loading);
+	}, [cartReducer.loading]);
+
+	useEffect(() => {
+		if (cartListState.length > 0) {
+			getTotalPrice();
+		}
+	}, [cartListState]);
+
+	const getTotalPrice = () => {
+		if (cartListState) {
+			let totalPrice: number = 0;
+			cartListState.forEach((product: any) => {
+				totalPrice += product.discountPrice * product.qty;
+			});
+			setTotalPrice(totalPrice);
+		}
+	};
+
+	const updateQty = (type: string, product: any) => {
+		const updateQty = type === 'minus' ? product.qty - 1 : product.qty + 1;
+		if (updateQty <= product.actualQty) {
+			if (updateQty === 0) {
+				dispatch(deleteCartProductQtyAction(product.cartId, authState.token, (response: string, msg?: string) => {
+					switch (response) {
+						case 'loading': {
+							setSnackbarMsg('Loading....');
+							setSnackbarVisible(true);
+							break;
+						}
+						case 'success': {
+							setSnackbarMsg('');
+							setSnackbarVisible(false);
+							break;
+						}
+						case 'fail': {
+							setSnackbarMsg(msg ? msg : '');
+							setSnackbarVisible(true);
+							break;
+						}
+					}
+				}));
+			} else {
+				dispatch(updateCartProductQtyAction(updateQty, product.productQtyId, userState, product.cartId));
+			}
+		} else {
+			setSnackbarMsg('Product Quantity Not Available');
+			setSnackbarVisible(true);
+		}
+	};
+
+	const deleteProduct = (cartId: number) => {
+		dispatch(deleteCartProductQtyAction(cartId, authState.token, (response: string, msg?: string) => {
+			switch (response) {
+				case 'loading': {
+					setSnackbarMsg('Loading....');
+					setSnackbarVisible(true);
+					break;
+				}
+				case 'success': {
+					setSnackbarMsg('');
+					setSnackbarVisible(false);
+					break;
+				}
+				case 'fail': {
+					setSnackbarMsg(msg ? msg : '');
+					setSnackbarVisible(true);
+					break;
+				}
+			}
+		}));
+	};
+
+	const onCashOnDelivery = () => {
+		const strProduct: any[] = [];
+		cartReducer.cartList.forEach((product: any) => {
+			strProduct.push({
+				cartId: product.cartId,
+				productId: product.productId,
+				qty: product.qty,
+				productQtyId: product.productQtyId,
+			});
+		});
+		dispatch(addUserOrderAction(authState.token, authState.userId, JSON.stringify(strProduct), +address, totalPrice, 'cash', '-', (response: string, msg?: string) => {
+			switch (response) {
+				case 'loading': {
+					setSnackbarMsg('Loading....');
+					setSnackbarVisible(true);
+					break;
+				}
+				case 'success': {
+					setSnackbarMsg('');
+					setSnackbarVisible(false);
+					NavigateToOrder();
+					break;
+				}
+				case 'fail': {
+					setSnackbarMsg(msg ? msg : '');
+					setSnackbarVisible(true);
+					break;
+				}
+			}
+		}));
+	};
+
+	const resetSnackBar = () => {
+		setSnackbarVisible(false);
+		setSnackbarMsg('');
+	};
+
+	useEffect(() => {
+		console.log(userState)
+		if (Boolean(userState.length)) {
+			const defaultAddress = userState.filter((address: IAddress) => address.isDefault === 'true')
+			if (defaultAddress.length > 0) {
+				setAddress(defaultAddress[0].addressId.toString());
+			} else {
+				setAddress(userState[0].addressId.toString());
+			}
+			setAddresses(userState.filter((address: IAddress) => address.addressId !== '0'));
+		} else {
+			setAddress('0');
+			setAddresses([]);
+		}
+	}, [userState]);
+
+	const onAddressOption = (selectedOption: React.ReactText) => {
+		setAddress(selectedOption.toString());
+	};
+
+	const getUserAddress = () => {
+		dispatch(getUserAddressAction(authState.userId, authState.token, (response: string, msg: string) => {
+			if (response === 'fail') {
+				setSnackbarVisible(true);
+				setSnackbarMsg(msg);
+			}
+		}));
+	};
+
+	const alertClicked = (type: string) => {
+		setIsOpen(false);
+		type === 'cash' ? onCashOnDelivery() : type === 'digital' ? Navigation.navigate('PaymentScreen', {amount: totalPrice, address: address}) : null;
+	};
+
+	return (
+		<SafeAreaView style={Style.container}>
+			<View>
+				<View
+					style={{
+						flexDirection: 'row',
+						justifyContent: 'space-between',
+						paddingVertical: 10,
+						borderBottomColor: color.grayColor,
+						borderBottomWidth: 1,
+					}}>
+					<Text>ADDRESS</Text>
+					<IconFea
+						name="edit-2"
+						size={18}
+						style={{
+							paddingLeft: 5,
+						}}
+						onPress={navigateToLocation}
+					/>
+				</View>
+				<View
+					style={{
+						backgroundColor: color.whiteColor,
+						shadowColor: "#000",
+						shadowOffset: {
+							width: 0,
+							height: 2,
+						},
+						shadowOpacity: 0.23,
+						shadowRadius: 2.62,
+						elevation: 4,
+						borderRadius: 5,
+						padding: 10,
+						marginVertical: 10,
+					}}>
+					{address === '0' ?
+						<Text
+							style={{
+								marginVertical: 5,
+							}}>
+							{'No Address Added'}
+						</Text> :
+						<Picker
+							style={{
+								height: 30,
+								borderBottomColor: color.primaryColor,
+								borderBottomWidth: 1,
+							}}
+							selectedValue={address}
+							onValueChange={(itemValue, itemIndex) => onAddressOption(itemValue)}>
+							{Boolean(addresses.length) && addresses.map((item: any) => {
+								return <Picker.Item label={item.address} value={item.addressId.toString()}/>;
+							})
+							}
+						</Picker>}
+				</View>
+			</View>
+			{cartReducer.cartList.length > 0 &&
+			<>
+				<FlatList
+					data={cartReducer.cartList}
+					style={{
+						marginVertical: 10,
+						borderTopColor: color.grayColor,
+						borderTopWidth: 1,
+						paddingTop: 10,
+					}}
+					renderItem={({item}) => {
+						return (
+							item.qty !== 0 ?
+								<View
+									style={{
+										backgroundColor: color.whiteColor,
+										borderRadius: 5,
+										marginVertical: 5,
+										flexDirection: 'row',
+									}}>
+									<View
+										style={{
+											flex: 3,
+											borderRadius: 5,
+										}}>
+										<Image
+											source={{uri: item.bigImage}}
+											style={{
+												height: 90,
+												flex: 3,
+												backgroundColor: color.grayColor,
+												overflow: 'hidden',
+											}}
+											resizeMode={'cover'}
+										/>
+									</View>
+									<View
+										style={{
+											flex: 8,
+											paddingVertical: 5,
+											paddingHorizontal: 5,
+											justifyContent: 'space-between',
+										}}>
+										<View>
+											<Text
+												style={{
+													fontSize: 20,
+													fontWeight: 'bold',
+													color: color.secondaryColor,
+												}}>
+												{item.productName}
+											</Text>
+											<Text
+												style={{
+													fontSize: 18,
+													fontWeight: 'bold',
+													color: color.primaryColor,
+												}}>
+												{'\u20B9'} {item.discountPrice}
+											</Text>
+										</View>
+										<Text
+											style={{
+												fontSize: 15,
+												fontWeight: 'bold',
+											}}>
+											Qty: {item.qty}
+										</Text>
+									</View>
+									<View
+										style={{
+											flex: 2,
+											justifyContent: 'space-between',
+											paddingVertical: 10,
+											alignItems: 'flex-end',
+											paddingHorizontal: 10,
+										}}>
+									</View>
+								</View> : null
+						);
+					}}
+				/>
+				<View
+					style={{
+						marginVertical: 10,
+						paddingVertical: 5,
+						borderTopColor: color.grayColor,
+						borderTopWidth: 1,
+						flexDirection: 'row',
+						height: width / 7,
+					}}>
+					<View style={{flex: 5, alignItems: 'flex-start'}}>
+						<Text
+							style={{
+								fontSize: 30,
+								fontWeight: 'bold',
+								color: color.secondaryColor,
+							}}>
+							{'\u20B9'} {totalPrice.toFixed(2)}
+						</Text>
+						<Text
+							style={{
+								fontSize: 10,
+							}}>
+							With all Text and Shipping
+						</Text>
+					</View>
+					<View style={{flex: 5}}>
+						<CustomIconButton
+							title={'CHECK OUT'}
+							icon={'credit-card-alt'}
+							iconLib={'font'}
+							onClick={navigateToPayment}
+							backgroundColor={color.primaryColor}
+						/>
+					</View>
+				</View>
+			</>
+			}
+			{/*<AnimatedBottomSheet translateY={translateY} />*/}
+			<Snackbar
+				visible={snackbarVisible}
+				onDismiss={resetSnackBar}
+				action={{
+					label: snackbarMsg !== 'Loading....' ? 'Ok' : '',
+					onPress: () => resetSnackBar(),
+				}}>
+				{snackbarMsg}
+			</Snackbar>
+			<CustomAlert
+				displayAlert={isOpen}
+				alertTitleText={'Choose Payment Method'}
+				onPressButton={alertClicked}
+			/>
+		</SafeAreaView>
+	);
 };
 
 export default PlaceOrderScreen;

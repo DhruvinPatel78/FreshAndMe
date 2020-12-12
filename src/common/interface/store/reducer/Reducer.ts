@@ -1,15 +1,16 @@
 /**
  * Register root reducer state here
  */
-import {IPasswordManagerState} from '../../../../store/interface/PasswordManager/PasswordManager';
+import {IAuthentication} from '../../../../store/interface/Authentication/AuthenticationInterface';
+import {IUserData} from '../../../../store/interface/UserData/UserDataInterface';
+import {ICart} from '../../../../store/interface/Cart/CartInterface';
+import {IOrderState} from '../../../../store/interface/Order/OrderInterface';
 
 export interface IRootReducerState {
-  /**
-   * PasswordManager Reducer state
-   */
-  passwordManagerReducer: IPasswordManagerState;
-  homeReducer:any
-  productReducer:any
-  authentication:any
-  cartReducer:any
+  homeReducer:any,
+  productReducer:any,
+  authentication: IAuthentication,
+  cartReducer: ICart,
+  UserDataReducer: IUserData,
+  orderReducer: IOrderState
 }
